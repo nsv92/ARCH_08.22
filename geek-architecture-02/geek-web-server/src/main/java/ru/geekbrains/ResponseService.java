@@ -17,7 +17,6 @@ public class ResponseService {
         output.println("HTTP/1.1 200 OK");
         output.println("Content-Type: text/html; charset=utf-8");
         output.println();
-        Files.newBufferedReader(path).transferTo(output);
     }
 
     public void fileNotFoundResponse() {

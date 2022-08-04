@@ -34,11 +34,13 @@ public class RequestHandler implements Runnable {
              PrintWriter output = new PrintWriter(socket.getOutputStream())) {
             requestParser.setInput(input);
             responseService.setOutput(output);
+            fileService.setOutput(output);
             String[] parts = requestParser.getRequest();
 
             try {
                 Path path = fileService.getFile(parts[1]);
                 responseService.okFileResponse(path);
+                fileService.sendFile(path);
             } catch (FileNotFoundException ex) {
                 responseService.fileNotFoundResponse();
                 return;
