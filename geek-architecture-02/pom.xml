@@ -17,7 +17,6 @@
 
     <modules>
         <module>geek-web-server</module>
-        <module>examples</module>
     </modules>
 
 </project>
