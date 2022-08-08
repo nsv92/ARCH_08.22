@@ -5,8 +5,6 @@ import ru.geekbrains.service.FileService;
 import ru.geekbrains.service.SocketService;
 
 import java.io.IOException;
-import java.util.Deque;
-import java.util.LinkedList;
 
 public class RequestHandler implements Runnable {
 
@@ -16,10 +14,13 @@ public class RequestHandler implements Runnable {
 
     private final RequestParser requestParser;
 
-    public RequestHandler(SocketService socketService, FileService fileService, RequestParser requestParser) {
+    private final ResponseSerializer responseSerializer;
+
+    public RequestHandler(SocketService socketService, FileService fileService, RequestParser requestParser, ResponseSerializer responseSerializer) {
         this.socketService = socketService;
         this.fileService = fileService;
         this.requestParser = requestParser;
+        this.responseSerializer = responseSerializer;
     }
 
     @Override
