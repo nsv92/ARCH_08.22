@@ -1,10 +1,12 @@
 package ru.geekbrains;
 
+import ru.geekbrains.domain.HttpRequest;
 import ru.geekbrains.service.FileService;
 import ru.geekbrains.service.SocketService;
 
 import java.io.IOException;
 import java.util.Deque;
+import java.util.LinkedList;
 
 public class RequestHandler implements Runnable {
 
@@ -12,18 +14,21 @@ public class RequestHandler implements Runnable {
 
     private final FileService fileService;
 
-    public RequestHandler(SocketService socketService, FileService fileService) {
+    private final RequestParser requestParser;
+
+    public RequestHandler(SocketService socketService, FileService fileService, RequestParser requestParser) {
         this.socketService = socketService;
         this.fileService = fileService;
+        this.requestParser = requestParser;
     }
 
     @Override
     public void run() {
-        Deque<String> rawRequest = socketService.readRequest();
-        String firstLine = rawRequest.pollFirst();
-        String[] parts = firstLine.split(" ");
 
-        if (!fileService.exists(parts[1])) {
+        HttpRequest request = requestParser.parse(socketService.readRequest());
+
+
+        if (!fileService.exists(request.getPath())) {
             String rawResponse =
                     "HTTP/1.1 404 NOT_FOUND\n" +
                     "Content-Type: text/html; charset=utf-8\n" +
@@ -36,7 +41,7 @@ public class RequestHandler implements Runnable {
         String rawResponse = "HTTP/1.1 200 OK\n" +
                 "Content-Type: text/html; charset=utf-8\n" +
                 "\n" +
-                fileService.readFile(parts[1]);
+                fileService.readFile(request.getPath());
         socketService.writeResponse(rawResponse);
 
         try {
