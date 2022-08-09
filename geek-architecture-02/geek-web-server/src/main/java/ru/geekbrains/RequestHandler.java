@@ -1,6 +1,7 @@
 package ru.geekbrains;
 
 import ru.geekbrains.domain.HttpRequest;
+import ru.geekbrains.domain.HttpResponse;
 import ru.geekbrains.service.FileService;
 import ru.geekbrains.service.SocketService;
 
@@ -30,20 +31,14 @@ public class RequestHandler implements Runnable {
 
 
         if (!fileService.exists(request.getPath())) {
-            String rawResponse =
-                    "HTTP/1.1 404 NOT_FOUND\n" +
-                    "Content-Type: text/html; charset=utf-8\n" +
-                    "\n" +
-                    "<h1>Файл не найден!</h1>";
-            socketService.writeResponse(rawResponse);
+            HttpResponse response = new HttpResponse(404, "Content-Type", "text/html; charset=utf-8", "<h1>Файл не найден!</h1>");
+            socketService.writeResponse(responseSerializer.serialize(response));
             return;
         }
 
-        String rawResponse = "HTTP/1.1 200 OK\n" +
-                "Content-Type: text/html; charset=utf-8\n" +
-                "\n" +
-                fileService.readFile(request.getPath());
-        socketService.writeResponse(rawResponse);
+        String body = fileService.readFile(request.getPath());
+        HttpResponse response = new HttpResponse(200, "Content-Type", "text/html; charset=utf-8", body);
+        socketService.writeResponse(responseSerializer.serialize(response));
 
         try {
             socketService.close();

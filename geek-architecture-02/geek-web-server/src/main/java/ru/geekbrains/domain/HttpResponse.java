@@ -1,5 +1,6 @@
 package ru.geekbrains.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponse {
@@ -34,6 +35,19 @@ public class HttpResponse {
     }
 
     public void setBody(String body) {
+        this.body = body;
+    }
+
+    public HttpResponse(int statusCode, Map<String, String> headers, String body) {
+        this.statusCode = statusCode;
+        this.headers = headers;
+        this.body = body;
+    }
+
+    public HttpResponse(int statusCode, String headerKey, String headerValue, String body) {
+        this.statusCode = statusCode;
+        headers = new HashMap<>();
+        headers.put(headerKey, headerValue);
         this.body = body;
     }
 }

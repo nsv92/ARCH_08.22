@@ -24,6 +24,8 @@ public class ResponseSerializer {
             case 500:
                 sb.append(code500).append("\n");
                 break;
+            default:
+                throw new IllegalArgumentException("No such status code!");
         }
         if (response.getHeaders() != null) {
             Map<String, String> headers = response.getHeaders();
