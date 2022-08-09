@@ -29,16 +29,14 @@ public class RequestHandler implements Runnable {
 
         HttpRequest request = requestParser.parse(socketService.readRequest());
 
-
         if (!fileService.exists(request.getPath())) {
             HttpResponse response = new HttpResponse(404, "Content-Type", "text/html; charset=utf-8", "<h1>Файл не найден!</h1>");
             socketService.writeResponse(responseSerializer.serialize(response));
-            return;
+        } else {
+            String body = fileService.readFile(request.getPath());
+            HttpResponse response = new HttpResponse(200, "Content-Type", "text/html; charset=utf-8", body);
+            socketService.writeResponse(responseSerializer.serialize(response));
         }
-
-        String body = fileService.readFile(request.getPath());
-        HttpResponse response = new HttpResponse(200, "Content-Type", "text/html; charset=utf-8", body);
-        socketService.writeResponse(responseSerializer.serialize(response));
 
         try {
             socketService.close();

@@ -9,17 +9,26 @@ import java.net.Socket;
 
 public class WebServer {
 
-    private static String WWW = "D:\\GeekBrains\\ARCH_EXAMPLES\\LESSON_1\\geek-architecture-02\\www";
+    private static Properties properties;
+
+    static {
+        try {
+            properties = new Properties();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(8088)) {
+
+        try (ServerSocket serverSocket = new ServerSocket(properties.getPort())) {
             System.out.println("Server started!");
 
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("New client connected!");
 
-                new Thread(new RequestHandler(new SocketService(socket), new FileService(WWW),
+                new Thread(new RequestHandler(new SocketService(socket), new FileService(properties.getRootDir()),
                         new RequestParser(), new ResponseSerializer())).start();
             }
         } catch (IOException e) {
