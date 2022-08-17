@@ -17,9 +17,10 @@ public class Properties {
 
 //        Программа видит файл по абсолютному пути
         File propertyFile = new File("D:\\GeekBrains\\!GIT\\ARCH_08.22\\geek-architecture-02\\geek-web-server\\src\\main\\resources\\server.properties");
-
 //        По относительным путям программа не видит файл
 //        File propertyFile = new File("server.properties");
+
+//        File propertyFile = new File(getClass().getResource("server.properties").getPath());
 //        File propertyFile = new File(".src/main/resources/server.properties");
         Map<String, String> allProperties = new HashMap<>();
         FileReader fr = new FileReader(propertyFile);
