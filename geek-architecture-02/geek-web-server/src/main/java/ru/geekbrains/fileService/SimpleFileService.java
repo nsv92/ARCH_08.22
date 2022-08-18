@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class FileService {
+public class SimpleFileService implements FileService {
 
     private final String rootDir;
 
-    public FileService(String rootDir) {
+    public SimpleFileService(String rootDir) {
         this.rootDir = rootDir;
     }
 
@@ -20,6 +20,7 @@ public class FileService {
         return Files.isDirectory(Path.of(rootDir, filename));
     }
 
+    @Override
     public String readFile(String filename) {
         try {
             StringBuilder sb = new StringBuilder();
