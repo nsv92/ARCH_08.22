@@ -32,20 +32,24 @@ public class RequestHandler implements Runnable {
         HttpRequest req = requestParser.parse(rawRequest);
 
         if (!fileService.exists(req.getUrl())) {
-            HttpResponse resp = new HttpResponse();
-            resp.setStatusCode(404);
-            resp.setStatusCodeName("NOT_FOUND");
-            resp.getHeaders().put("Content-Type", "text/html; charset=utf-8");
-            socketService.writeResponse(responseSerializer.serialize(resp));
-            return;
-        }
 
-        HttpResponse resp = new HttpResponse();
-        resp.setStatusCode(200);
-        resp.setStatusCodeName("OK");
-        resp.getHeaders().put("Content-Type", "text/html; charset=utf-8");
-        resp.setBody(fileService.readFile(req.getUrl()));
-        socketService.writeResponse(responseSerializer.serialize(resp));
+            HttpResponse resp = HttpResponse.createBuilder()
+                    .withStatusCode(404)
+                    .withStatusCodeName("NOT_FOUND")
+                    .withOneHeader("Content-Type", "text/html; charset=utf-8")
+                    .withBody("<h1>Файл не найден!</h1>")
+                    .build();
+            socketService.writeResponse(responseSerializer.serialize(resp));
+//            return;
+        } else {
+            HttpResponse resp = HttpResponse.createBuilder()
+                    .withStatusCode(200)
+                    .withStatusCodeName("OK")
+                    .withOneHeader("Content-Type", "text/html; charset=utf-8")
+                    .withBody(fileService.readFile(req.getUrl()))
+                    .build();
+            socketService.writeResponse(responseSerializer.serialize(resp));
+        }
 
         try {
             socketService.close();
