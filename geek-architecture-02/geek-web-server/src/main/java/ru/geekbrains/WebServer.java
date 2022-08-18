@@ -22,7 +22,6 @@ public class WebServer {
 
                 new Thread(new RequestHandler(
                         SocketServiceFactory.create(socket),
-//                        new SimpleSocketService(socket),
                         FileServiceFactory.create(config.getWww()),
                         new RequestParser(),
                         new ResponseSerializer()
