@@ -1,10 +1,9 @@
-package ru.geekbrains.service;
+package ru.geekbrains.fileService;
 
 public final class FIleServiceFactory {
 
-    public static FileService create(String args) {
-
-        return  new SimpleFileService(args);
+    public static FileService create(String rootDir) {
+        return  new SimpleFileService(rootDir);
     }
 
 }

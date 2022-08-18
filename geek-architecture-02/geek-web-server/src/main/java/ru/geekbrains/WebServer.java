@@ -1,7 +1,8 @@
 package ru.geekbrains;
 
-import ru.geekbrains.config.*;
-import ru.geekbrains.service.FileService;
+import ru.geekbrains.config.ServerConfig;
+import ru.geekbrains.config.ServerConfigFactory;
+import ru.geekbrains.fileService.FIleServiceFactory;
 import ru.geekbrains.service.SocketService;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class WebServer {
 
                 new Thread(new RequestHandler(
                         new SocketService(socket),
-                        new FileService(config.getWww()),
+                        FIleServiceFactory.create(config.getWww()),
                         new RequestParser(),
                         new ResponseSerializer()
                 )).start();

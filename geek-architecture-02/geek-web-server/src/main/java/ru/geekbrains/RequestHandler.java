@@ -2,7 +2,7 @@ package ru.geekbrains;
 
 import ru.geekbrains.domain.HttpRequest;
 import ru.geekbrains.domain.HttpResponse;
-import ru.geekbrains.service.FileService;
+import ru.geekbrains.fileService.FileService;
 import ru.geekbrains.service.SocketService;
 
 import java.io.IOException;

@@ -9,8 +9,10 @@ public final class ServerConfigFactory {
         if (args.length >= 2) {
             return new ConfigFromCli(args);
         } else if (Files.exists(Path.of("../../../server.properties"))) {
+            System.out.println("File exists! Preparing config");
             return new ConfigFromFile("../../../server.properties");
         } else {
+            System.out.println("FIXED CONFIG!!!");
             return new ConfigFromFixedValues();
         }
     }
