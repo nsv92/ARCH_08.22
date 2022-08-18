@@ -1,4 +1,4 @@
-package ru.geekbrains.fileService;
+package ru.geekbrains.services.fileService;
 
 import java.io.IOException;
 import java.nio.file.Files;
