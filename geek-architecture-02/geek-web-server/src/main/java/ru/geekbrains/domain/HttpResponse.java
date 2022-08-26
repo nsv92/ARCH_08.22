@@ -61,7 +61,7 @@ public class HttpResponse {
         }
 
         public HttpResponse build() {
-            if (this.response.statusCodeName != null) {
+            if (this.response.statusCodeName == null) {
                 throw new IllegalStateException("Status code not defined");
             }
             return response;
