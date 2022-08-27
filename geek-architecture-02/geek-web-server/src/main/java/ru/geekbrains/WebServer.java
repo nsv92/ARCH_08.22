@@ -27,12 +27,12 @@ public class WebServer {
                 new Thread(new RequestHandler(
                         socketService,
                         new RequestParser(),
-                        MethodHandlerFactory.create(socketService, new ResponseSerializer(), config,  new FileService(config.getWww()))
-//                        MethodHandlerFactory.createAnnotated(socketService, new ResponseSerializer(), config,  new FileService(config.getWww()))
+//                        MethodHandlerFactory.create(socketService, new ResponseSerializer(), config,  new FileService(config.getWww()))
+                        MethodHandlerFactory.createAnnotated(socketService, new ResponseSerializer(), config,  new FileService(config.getWww()))
                 )).start();
             }
-        } catch (IOException /*| NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException*/ e) {
+        } catch (IOException | NoSuchMethodException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
             e.printStackTrace();
         }
     }

@@ -9,6 +9,7 @@ import ru.geekbrains.service.SocketService;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ public final class MethodHandlerFactory {
                                                 ServerConfig serverConfig, FileService fileService) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Reflections reflections = new Reflections("ru.geekbrains.handler");
         Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Handler.class);
+
         /*В хэшмэп кладу ордер из аннотации и коснтруктор класса*/
         HashMap<Integer, Constructor<?>> constructorMap = new HashMap<>();
         for (Class<?> x : classes
@@ -47,12 +49,13 @@ public final class MethodHandlerFactory {
         int size = constructorMap.size();
 
         for (int i = size - 1; i >= 0; i--) {
+            /*Если первый элемент с конца, то */
             if (i == size - 1) {
-                methodHandlerMap.put(i, (MethodHandlerImpl) constructorMap.get(i).newInstance(null, socketService, responseSerializer, serverConfig));
+                methodHandlerMap.put(i, (MethodHandler) constructorMap.get(i).newInstance(null, socketService, responseSerializer, serverConfig));
             } else if (i == 0) {
-                methodHandlerMap.put(i, (MethodHandlerImpl) constructorMap.get(i).newInstance(constructorMap.get(i + 1), socketService, responseSerializer, serverConfig, fileService));
+                methodHandlerMap.put(i, (MethodHandler) constructorMap.get(i).newInstance(methodHandlerMap.get(i + 1), socketService, responseSerializer, serverConfig, fileService));
             } else {
-                methodHandlerMap.put(i, (MethodHandlerImpl) constructorMap.get(i).newInstance(constructorMap.get(i + 1), socketService, responseSerializer, serverConfig));
+                methodHandlerMap.put(i, (MethodHandler) constructorMap.get(i).newInstance(methodHandlerMap.get(i + 1), socketService, responseSerializer, serverConfig));
             }
         }
         return methodHandlerMap.get(0);

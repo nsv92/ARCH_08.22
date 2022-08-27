@@ -26,6 +26,7 @@ class GetMethodHandler extends MethodHandlerImpl {
                     .withStatusCode(404)
                     .withStatusCodeName("NOT_FOUND")
                     .withHeader("Content-Type", "text/html; charset=utf-8")
+                    .withBody("<h1>File not found!</h1>")
                     .build();
         }
 
