@@ -9,7 +9,6 @@ import ru.geekbrains.service.SocketService;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,7 +23,8 @@ public final class MethodHandlerFactory {
     }
 
     public static MethodHandler createAnnotated(SocketService socketService, ResponseSerializer responseSerializer,
-                                                ServerConfig serverConfig, FileService fileService) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+                                                ServerConfig serverConfig, FileService fileService) throws
+            NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Reflections reflections = new Reflections("ru.geekbrains.handler");
         Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Handler.class);
 
@@ -44,21 +44,15 @@ public final class MethodHandlerFactory {
             constructorMap.put(order, constructor);
         }
 
-        /*В хэшмэп кладу ордер и экземпляр класса в обратном порядке (от пут к гет)*/
-        HashMap<Integer, MethodHandler> methodHandlerMap = new HashMap<>();
-        int size = constructorMap.size();
-
-        for (int i = size - 1; i >= 0; i--) {
-            /*Если первый элемент с конца, то */
-            if (i == size - 1) {
-                methodHandlerMap.put(i, (MethodHandler) constructorMap.get(i).newInstance(null, socketService, responseSerializer, serverConfig));
-            } else if (i == 0) {
-                methodHandlerMap.put(i, (MethodHandler) constructorMap.get(i).newInstance(methodHandlerMap.get(i + 1), socketService, responseSerializer, serverConfig, fileService));
+        MethodHandler methodHandler = null;
+        for (int i = constructorMap.size() - 1; i >= 0; i--) {
+            if (i == 0) {
+                methodHandler = (MethodHandler) constructorMap.get(i).newInstance(methodHandler, socketService, responseSerializer, serverConfig, fileService);
             } else {
-                methodHandlerMap.put(i, (MethodHandler) constructorMap.get(i).newInstance(methodHandlerMap.get(i + 1), socketService, responseSerializer, serverConfig));
+                methodHandler = (MethodHandler) constructorMap.get(i).newInstance(methodHandler, socketService, responseSerializer, serverConfig);
             }
         }
-        return methodHandlerMap.get(0);
+        return methodHandler;
     }
 
     private static Constructor<?> createConstructor(Class<?> someClass) throws NoSuchMethodException {
