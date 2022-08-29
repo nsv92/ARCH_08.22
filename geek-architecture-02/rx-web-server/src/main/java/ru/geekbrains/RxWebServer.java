@@ -3,6 +3,8 @@ package ru.geekbrains;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
+import ru.geekbrains.config.ServerConfig;
+import ru.geekbrains.config.ServerConfigFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +18,8 @@ import java.util.LinkedList;
 public class RxWebServer {
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(8088);
+        ServerConfig config = ServerConfigFactory.create(args);
+        ServerSocket serverSocket = new ServerSocket(config.getPort());
 
         Observable.<Socket>create(emitter -> {
                     try {
