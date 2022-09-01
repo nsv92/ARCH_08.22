@@ -1,6 +1,7 @@
 package ru.geekbrains.orm;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class UnitOfWork {
@@ -28,6 +29,28 @@ public class UnitOfWork {
     }
 
     public void commit() {
-
+        if (!newUsers.isEmpty()) {
+            Iterator<User> it = newUsers.iterator();
+            while (it.hasNext()) {
+                userMapper.insert(it.next());
+                it.remove();
+            }
+        }
+        if (!updateUsers.isEmpty()) {
+            Iterator<User> it = updateUsers.iterator();
+            while (it.hasNext()) {
+                userMapper.update(it.next());
+                it.remove();
+            }
+        }
+        if (!deleteUsers.isEmpty()) {
+            Iterator<User> it = deleteUsers.iterator();
+            while (it.hasNext()) {
+                userMapper.delete(it.next());
+                it.remove();
+            }
+        }
     }
+
 }
+
