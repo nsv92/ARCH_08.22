@@ -7,6 +7,4 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Handler {
 
     int order();
-
-    String method();
 }

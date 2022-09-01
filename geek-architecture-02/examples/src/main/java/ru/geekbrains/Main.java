@@ -1,5 +1,7 @@
 package ru.geekbrains;
 
+import java.util.Collections;
+
 public class Main {
 
     public static class SomeClass implements Cloneable {

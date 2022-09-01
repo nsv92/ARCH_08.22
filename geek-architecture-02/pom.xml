@@ -18,7 +18,6 @@
     <modules>
         <module>geek-web-server</module>
         <module>examples</module>
-        <module>structural-design-patterns</module>
         <module>rx-web-server</module>
     </modules>
 

@@ -1,7 +1,9 @@
 package ru.geekbrains;
 
 import ru.geekbrains.domain.HttpRequest;
+import ru.geekbrains.domain.HttpResponse;
 import ru.geekbrains.handler.MethodHandler;
+import ru.geekbrains.service.FileService;
 import ru.geekbrains.service.SocketService;
 
 import java.io.IOException;
@@ -15,7 +17,8 @@ public class RequestHandler implements Runnable {
 
     public RequestHandler(SocketService socketService,
                           RequestParser requestParser,
-                          MethodHandler methodHandler) {
+                          MethodHandler methodHandler
+                          ) {
         this.socketService = socketService;
         this.requestParser = requestParser;
         this.methodHandler = methodHandler;

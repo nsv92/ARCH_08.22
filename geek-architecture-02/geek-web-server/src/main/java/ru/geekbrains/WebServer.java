@@ -1,13 +1,11 @@
 package ru.geekbrains;
 
-import ru.geekbrains.config.ServerConfig;
-import ru.geekbrains.config.ServerConfigFactory;
-import ru.geekbrains.handler.MethodHandlerFactory;
+import ru.geekbrains.config.*;
+import ru.geekbrains.handler.AnnotatedMethodHandlerFactory;
 import ru.geekbrains.service.FileService;
 import ru.geekbrains.service.SocketService;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -27,12 +25,12 @@ public class WebServer {
                 new Thread(new RequestHandler(
                         socketService,
                         new RequestParser(),
-//                        MethodHandlerFactory.create(socketService, new ResponseSerializer(), config,  new FileService(config.getWww()))
-                        MethodHandlerFactory.createAnnotated(socketService, new ResponseSerializer(), config,  new FileService(config.getWww()))
+                        AnnotatedMethodHandlerFactory.create(socketService,
+                                new ResponseSerializer(),
+                                new FileService(config.getWww()))
                 )).start();
             }
-        } catch (IOException | NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
